@@ -21,8 +21,14 @@ def load_data(org_data,out_data,label,ID):
     
      orgdf = pd.read_csv(org_data)
      
-      # 删除无用特征
+     # 删除无用特征
      del orgdf['Utilities']
+     
+     # 删除测试集中没有的特征
+     dellists = ['Condition2','HouseStyle','RoofMatl','Exterior1st','Exterior2nd',
+                 'Heating','Electrical','MiscFeature']
+     for fea in dellists:
+        del orgdf[fea]
      
      y = np.array([])
     
@@ -50,7 +56,8 @@ def load_data(org_data,out_data,label,ID):
                  'GarageFinish','GarageQual','GarageType','BsmtCond','BsmtExposure',
                  'BsmtQual','BsmtFinType2','BsmtFinType1','MasVnrType']
      for col in fillnons:
-         Xdf[col] = Xdf[col].fillna('None')
+        if col in cols:
+            Xdf[col] = Xdf[col].fillna('None')
      
      del fillnons
      
@@ -63,7 +70,8 @@ def load_data(org_data,out_data,label,ID):
              'BsmtFinSF2','BsmtUnfSF','GarageArea','GarageCars','TotalBsmtSF']
      
      for col in fillos:
-         Xdf[col] = Xdf[col].fillna(0)
+         if col in cols:
+            Xdf[col] = Xdf[col].fillna(0)
          
      del fillos
      
@@ -71,14 +79,16 @@ def load_data(org_data,out_data,label,ID):
      fillmds=['MSZoning','Functional','Electrical','Exterior1st','Exterior2nd','KitchenQual',
               'SaleType']
      for col in fillmds:
-         Xdf[col] =Xdf[col].fillna(Xdf[col].mode()[0])
+        if col in cols:
+            Xdf[col] =Xdf[col].fillna(Xdf[col].mode()[0])
      
      del fillmds
      
      # numerical 2 categorical
      n2cCols =['MSSubClass','OverallCond','YrSold','MoSold']
      for col in n2cCols:
-         Xdf[col] = Xdf[col].astype(str)
+         if col in cols:
+            Xdf[col] = Xdf[col].astype(str)
      del n2cCols
     
      # categorical 2 numerical
@@ -90,9 +100,10 @@ def load_data(org_data,out_data,label,ID):
         'YrSold', 'MoSold']
      
      for col in c2nCols:
-         lbl =LabelEncoder()
-         lbl.fit(list(Xdf[col].values))
-         Xdf[col] = lbl.transform(list(Xdf[col].values))
+            if col in cols:
+                lbl =LabelEncoder()
+                lbl.fit(list(Xdf[col].values))
+                Xdf[col] = lbl.transform(list(Xdf[col].values))
          
      del c2nCols
      
@@ -108,10 +119,10 @@ def load_data(org_data,out_data,label,ID):
      
      # categorical onehot
      Xdf = pd.get_dummies(Xdf)
-    
+     cols_new = Xdf.columns
      X = np.array(Xdf)
-     
-     np.savez(out_data,X=X,y=y,org_id=org_id,cols=cols)
+     del cols
+     np.savez(out_data,X=X,y=y,org_id=org_id,cols=cols_new)
      
      return
 
