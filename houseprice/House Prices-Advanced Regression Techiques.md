@@ -53,6 +53,55 @@ python datapreprocessing.py --orgdata test.csv --outdata test.npz
 ```
 
 #### 3.2 model training
+- 模型训练
+    
+    - 基础模型训练
+        
+        lasso、ENet、KRR、GBoost
+    
+    - 模型融合
+    
+        AveragingModels
+        
+        StackingAveragedModels
+
+- 模型代码
+
+```python
+
+# 模型代码
+
+modelTrain.py
+
+# 输入数据
+train.csv
+test.csv
+
+# 运行
+python modelTrain.py
+
+# 运行结果
+输出submission.csv 文件
+
+ scores of model 0:0.1314(0.0146)
+
+
+ scores of model 1:0.1265(0.0100)
+
+
+ scores of model 2:0.1264(0.0102)
+
+
+ scores of model 3:0.1259(0.0115)
+
+
+ scores of model 4:0.1257(0.0111)
+
+
+ scores of model 5:0.1210(0.0110)
+
+
+```
 
 ### 4 kaggle 相关
 - [kaggle API 安装](https://github.com/Kaggle/kaggle-api)
